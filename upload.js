@@ -1,8 +1,8 @@
 document.getElementById("displaytext").style.display = "none";
-const sdk = apigClientFactory.newClient({});
+const sdk = apigClientFactory.newClient({apiKey:"K43G5Y7l8F1B7zFi5M16E21Zkpxz0lVeZjWRtOw5"});
 
 function searchPhoto() {
-    var image_message = document.getElementById("note-textarea").value;
+    let image_message = document.getElementById("note-textarea").value;
     if (image_message === "")
         image_message = document.getElementById("transcript").value;
 
@@ -11,6 +11,7 @@ function searchPhoto() {
     var body = {};
     var params = {
         q: image_message,
+        'x-api-key': 'K43G5Y7l8F1B7zFi5M16E21Zkpxz0lVeZjWRtOw5'
     };
     var additionalParams = {
         headers: {
@@ -81,6 +82,7 @@ function uploadPhoto() {
             var params = {
                 bucket: "cloud-hw2-photos",
                 key: file.name,
+                'x-api-key': 'K43G5Y7l8F1B7zFi5M16E21Zkpxz0lVeZjWRtOw5',
                 "x-amz-meta-customlabels": document.getElementById("labels").value
             };
 
