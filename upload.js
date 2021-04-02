@@ -79,11 +79,10 @@ function uploadPhoto() {
         defaultContentType: "image/jpeg",
         defaultAcceptType: "image/jpeg"});
 
-    var file_data;
     // var file = document.querySelector('#file_path > input[type="file"]').files[0];
     var encoded_image = getBase64(file).then(
-        () => {
-            var body = file;
+        (data) => {
+            var body = data;
             var params = {
                 bucket: "cloud-hw2-photos",
                 key: file.name,
