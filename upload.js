@@ -93,7 +93,7 @@ function uploadPhoto() {
 
             var additionalParams = {
                 headers: {
-                    'Content-Type': 'image/jpeg',
+                    'Content-Type': 'image/jpeg;base64',
                     "x-amz-meta-customlabels": document.getElementById("labels").value
                 },
             };
