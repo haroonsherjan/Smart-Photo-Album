@@ -1,7 +1,8 @@
 document.getElementById("displaytext").style.display = "none";
-const sdk = apigClientFactory.newClient({apiKey:"K43G5Y7l8F1B7zFi5M16E21Zkpxz0lVeZjWRtOw5"});
+
 
 function searchPhoto() {
+    let sdk = apigClientFactory.newClient({apiKey:"K43G5Y7l8F1B7zFi5M16E21Zkpxz0lVeZjWRtOw5"});
     let image_message = document.getElementById("note-textarea").value;
     if (image_message === "")
         image_message = document.getElementById("transcript").value;
@@ -73,6 +74,10 @@ function uploadPhoto() {
     // var file_data = $("#file_path").prop("files")[0];
     var file = document.getElementById('file_path').files[0];
     const reader = new FileReader();
+    let sdk = apigClientFactory.newClient({
+        apiKey:"K43G5Y7l8F1B7zFi5M16E21Zkpxz0lVeZjWRtOw5",
+        defaultContentType: "image/jpeg",
+        defaultAcceptType: "image/jpeg"});
 
     var file_data;
     // var file = document.querySelector('#file_path > input[type="file"]').files[0];
@@ -82,12 +87,14 @@ function uploadPhoto() {
             var params = {
                 bucket: "cloud-hw2-photos",
                 key: file.name,
+                'Content-Type': 'image/jpeg',
                 'x-api-key': 'K43G5Y7l8F1B7zFi5M16E21Zkpxz0lVeZjWRtOw5',
                 "x-amz-meta-customlabels": document.getElementById("labels").value
             };
 
             var additionalParams = {
                 headers: {
+                    'Content-Type': 'image/jpeg',
                     "x-amz-meta-customlabels": document.getElementById("labels").value
                 },
             };
