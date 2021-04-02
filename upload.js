@@ -80,12 +80,13 @@ function uploadPhoto() {
             var body = file;
             var params = {
                 bucket: "cloud-hw2-photos",
-                key: file.name
+                key: file.name,
+                "x-amz-meta-customlabels": document.getElementById("labels").value
             };
 
             var additionalParams = {
                 headers: {
-                    'Content-Type': "image/jpeg",
+                    'Content-Type': "image/jpg",
                     "x-amz-meta-customlabels": document.getElementById("labels").value
                 },
             };
