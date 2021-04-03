@@ -1,0 +1,381 @@
+# Import properties for LambdaFunction (AWS::Lambda::Function)
+# 
+#     FunctionName: cloud-hw2-GetPhoto
+# 
+# Import properties for LambdaFunction2 (AWS::Lambda::Function)
+# 
+#     FunctionName: Cloud-Hw2-PutPhoto
+# 
+# Import properties for S3Bucket (AWS::S3::Bucket)
+# 
+#     BucketName: cloud-hw2-frontend
+# 
+# Import properties for S3Bucket2 (AWS::S3::Bucket)
+# 
+#     BucketName: cloud-hw2-photos
+# 
+# Import properties for ApiGatewayRestApi (AWS::ApiGateway::RestApi)
+# 
+#     RestApiId: 7q5gc39lr9
+# 
+# Import properties for ApiGatewayStage (AWS::ApiGateway::Stage)
+# 
+#     RestApiId: 7q5gc39lr9
+#     StageName: prod
+# 
+# Import properties for ApiGatewayDeployment (AWS::ApiGateway::Deployment)
+# 
+#     RestApiId: 7q5gc39lr9
+#     DeploymentId: 9mu10l
+# 
+# Import properties for ApiGatewayResource (AWS::ApiGateway::Resource)
+# 
+#     RestApiId: 7q5gc39lr9
+#     ResourceId: aky6cn
+# 
+# Import properties for ApiGatewayResource2 (AWS::ApiGateway::Resource)
+# 
+#     RestApiId: 7q5gc39lr9
+#     ResourceId: vaodf9
+# 
+# Import properties for ApiGatewayResource3 (AWS::ApiGateway::Resource)
+# 
+#     RestApiId: 7q5gc39lr9
+#     ResourceId: z6tm0r
+# 
+# Import properties for ApiGatewayResource4 (AWS::ApiGateway::Resource)
+# 
+#     RestApiId: 7q5gc39lr9
+#     ResourceId: lpywnc
+# 
+# Import properties for ApiGatewayMethod (AWS::ApiGateway::Method)
+# 
+#     RestApiId: 7q5gc39lr9
+#     ResourceId: z6tm0r
+#     HttpMethod: GET
+# 
+# Import properties for ApiGatewayMethod2 (AWS::ApiGateway::Method)
+# 
+#     RestApiId: 7q5gc39lr9
+#     ResourceId: z6tm0r
+#     HttpMethod: OPTIONS
+# 
+# Import properties for ApiGatewayMethod3 (AWS::ApiGateway::Method)
+# 
+#     RestApiId: 7q5gc39lr9
+#     ResourceId: lpywnc
+#     HttpMethod: OPTIONS
+# 
+# Import properties for ApiGatewayMethod4 (AWS::ApiGateway::Method)
+# 
+#     RestApiId: 7q5gc39lr9
+#     ResourceId: lpywnc
+#     HttpMethod: PUT
+# 
+AWSTemplateFormatVersion: "2010-09-09"
+Metadata:
+    Generator: "former2"
+Description: ""
+Resources:
+    LambdaFunction:
+        DeletionPolicy: "Retain"
+        Type: "AWS::Lambda::Function"
+        Properties:
+            Description: ""
+            FunctionName: "cloud-hw2-GetPhoto"
+            Handler: "lambda_function.lambda_handler"
+            Code: 
+                S3Bucket: !Sub "${ApiGatewayStage}-04-2014-tasks"
+                S3Key: !Sub "/snapshots/${AWS::AccountId}/cloud-hw2-GetPhoto-22c0fe4d-898a-4fb3-a51c-8bb0cfebbbb3"
+                S3ObjectVersion: "YrPSPv8MTWVtWNJrNvBgfIlIssVX_VKz"
+            MemorySize: 128
+            Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/cloud-hw2-GetPhoto-role-97nnqu6k"
+            Runtime: "python3.8"
+            Timeout: 3
+            TracingConfig: 
+                Mode: "PassThrough"
+            Layers: 
+              - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:elasticSearchAndRequestAuth:2"
+
+    LambdaFunction2:
+        DeletionPolicy: "Retain"
+        Type: "AWS::Lambda::Function"
+        Properties:
+            Description: ""
+            FunctionName: "Cloud-Hw2-PutPhoto"
+            Handler: "lambda_function.lambda_handler"
+            Code: 
+                S3Bucket: !Sub "${ApiGatewayStage}-04-2014-tasks"
+                S3Key: !Sub "/snapshots/${AWS::AccountId}/Cloud-Hw2-PutPhoto-57aba864-6646-4089-a1cf-ac7241f45fac"
+                S3ObjectVersion: "KJ9HzXRcb8RHjAPrM6NLu0VmaReNpuNT"
+            MemorySize: 128
+            Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/Cloud-Hw2-PutPhoto-role-b5bs4i34"
+            Runtime: "python3.8"
+            Timeout: 3
+            TracingConfig: 
+                Mode: "PassThrough"
+            Layers: 
+              - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:elasticSearchAndRequestAuth:2"
+
+    S3Bucket:
+        DeletionPolicy: "Retain"
+        Type: "AWS::S3::Bucket"
+        Properties:
+            BucketName: "cloud-hw2-frontend"
+            WebsiteConfiguration: 
+                IndexDocument: "index.html"
+
+    S3Bucket2:
+        DeletionPolicy: "Retain"
+        Type: "AWS::S3::Bucket"
+        Properties:
+            BucketName: "cloud-hw2-photos"
+            CorsConfiguration: 
+                CorsRules: 
+                  - 
+                    AllowedHeaders: 
+                      - "*"
+                    AllowedMethods: 
+                      - "PUT"
+                    AllowedOrigins: 
+                      - "*"
+            NotificationConfiguration: 
+                LambdaConfigurations: 
+                  - 
+                    Event: "s3:ObjectCreated:Put"
+                    Function: !GetAtt LambdaFunction2.Arn
+
+    ApiGatewayRestApi:
+        DeletionPolicy: "Retain"
+        Type: "AWS::ApiGateway::RestApi"
+        Properties:
+            Name: "AI Photo Search"
+            Description: "AI Photo Search application, built during the Cloud and Big Data course at Columbia University."
+            ApiKeySourceType: "HEADER"
+            BinaryMediaTypes: 
+              - "image/png"
+              - "image/jpg"
+              - "image/jpeg"
+            EndpointConfiguration: 
+                Types: 
+                  - "REGIONAL"
+
+    ApiGatewayStage:
+        DeletionPolicy: "Retain"
+        Type: "AWS::ApiGateway::Stage"
+        Properties:
+            StageName: "prod"
+            DeploymentId: !Ref ApiGatewayDeployment
+            RestApiId: !Ref ApiGatewayRestApi
+            CacheClusterEnabled: false
+            MethodSettings: 
+              - 
+                CacheDataEncrypted: false
+                CacheTtlInSeconds: 300
+                CachingEnabled: false
+                DataTraceEnabled: true
+                HttpMethod: "*"
+                LoggingLevel: "INFO"
+                MetricsEnabled: false
+                ResourcePath: "*"
+                ThrottlingBurstLimit: 5000
+                ThrottlingRateLimit: 10000
+            TracingEnabled: false
+
+    ApiGatewayDeployment:
+        DeletionPolicy: "Retain"
+        Type: "AWS::ApiGateway::Deployment"
+        Properties:
+            RestApiId: !Ref ApiGatewayRestApi
+
+    ApiGatewayResource:
+        DeletionPolicy: "Retain"
+        Type: "AWS::ApiGateway::Resource"
+        Properties:
+            RestApiId: !Ref ApiGatewayRestApi
+            PathPart: "upload"
+            ParentId: !GetAtt ApiGatewayRestApi.RootResourceId
+
+    ApiGatewayResource2:
+        DeletionPolicy: "Retain"
+        Type: "AWS::ApiGateway::Resource"
+        Properties:
+            RestApiId: !Ref ApiGatewayRestApi
+            PathPart: "{bucket}"
+            ParentId: !Ref ApiGatewayResource
+
+    ApiGatewayResource3:
+        DeletionPolicy: "Retain"
+        Type: "AWS::ApiGateway::Resource"
+        Properties:
+            RestApiId: !Ref ApiGatewayRestApi
+            PathPart: "search"
+            ParentId: !GetAtt ApiGatewayRestApi.RootResourceId
+
+    ApiGatewayResource4:
+        DeletionPolicy: "Retain"
+        Type: "AWS::ApiGateway::Resource"
+        Properties:
+            RestApiId: !Ref ApiGatewayRestApi
+            PathPart: "{key}"
+            ParentId: !Ref ApiGatewayResource2
+
+    ApiGatewayMethod:
+        DeletionPolicy: "Retain"
+        Type: "AWS::ApiGateway::Method"
+        Properties:
+            RestApiId: !Ref ApiGatewayRestApi
+            ResourceId: !Ref ApiGatewayResource3
+            HttpMethod: "GET"
+            AuthorizationType: "NONE"
+            ApiKeyRequired: true
+            OperationName: "searchPhotos"
+            RequestParameters: 
+                "method.request.querystring.q": true
+            MethodResponses: 
+              - 
+                ResponseModels: 
+                    "application/json": "SearchResponse"
+                ResponseParameters: 
+                    "method.response.header.Access-Control-Allow-Origin": false
+                StatusCode: "200"
+              - 
+                ResponseModels: 
+                    "application/json": "Error"
+                StatusCode: "403"
+              - 
+                ResponseModels: 
+                    "application/json": "Error"
+                StatusCode: "500"
+            Integration: 
+                CacheNamespace: !Ref ApiGatewayResource3
+                ContentHandling: "CONVERT_TO_TEXT"
+                IntegrationHttpMethod: "POST"
+                IntegrationResponses: 
+                  - 
+                    ResponseParameters: 
+                        "method.response.header.Access-Control-Allow-Origin": "'*'"
+                    ResponseTemplates: {}
+                    StatusCode: "200"
+                PassthroughBehavior: "WHEN_NO_MATCH"
+                TimeoutInMillis: 29000
+                Type: "AWS_PROXY"
+                Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${LambdaFunction}/invocations"
+
+    ApiGatewayMethod2:
+        DeletionPolicy: "Retain"
+        Type: "AWS::ApiGateway::Method"
+        Properties:
+            RestApiId: !Ref ApiGatewayRestApi
+            ResourceId: !Ref ApiGatewayResource3
+            HttpMethod: "OPTIONS"
+            AuthorizationType: "NONE"
+            ApiKeyRequired: false
+            RequestParameters: {}
+            MethodResponses: 
+              - 
+                ResponseParameters: 
+                    "method.response.header.Access-Control-Allow-Headers": false
+                    "method.response.header.Access-Control-Allow-Methods": false
+                    "method.response.header.Access-Control-Allow-Origin": false
+                StatusCode: "200"
+            Integration: 
+                CacheNamespace: !Ref ApiGatewayResource3
+                IntegrationResponses: 
+                  - 
+                    ResponseParameters: 
+                        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+                        "method.response.header.Access-Control-Allow-Methods": "'GET,OPTIONS'"
+                        "method.response.header.Access-Control-Allow-Origin": "'*'"
+                    ResponseTemplates: {}
+                    SelectionPattern: "200"
+                    StatusCode: "200"
+                PassthroughBehavior: "WHEN_NO_MATCH"
+                RequestTemplates: 
+                    "application/json": "{\"statusCode\": 200}"
+                TimeoutInMillis: 29000
+                Type: "MOCK"
+
+    ApiGatewayMethod3:
+        DeletionPolicy: "Retain"
+        Type: "AWS::ApiGateway::Method"
+        Properties:
+            RestApiId: !Ref ApiGatewayRestApi
+            ResourceId: !Ref ApiGatewayResource4
+            HttpMethod: "OPTIONS"
+            AuthorizationType: "NONE"
+            ApiKeyRequired: false
+            RequestParameters: {}
+            MethodResponses: 
+              - 
+                ResponseParameters: 
+                    "method.response.header.Access-Control-Allow-Headers": false
+                    "method.response.header.Access-Control-Allow-Methods": false
+                    "method.response.header.Access-Control-Allow-Origin": false
+                StatusCode: "200"
+            Integration: 
+                CacheNamespace: !Ref ApiGatewayResource4
+                IntegrationResponses: 
+                  - 
+                    ResponseParameters: 
+                        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-Meta-customlabels'"
+                        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,PUT'"
+                        "method.response.header.Access-Control-Allow-Origin": "'*'"
+                    ResponseTemplates: {}
+                    SelectionPattern: "200"
+                    StatusCode: "200"
+                PassthroughBehavior: "WHEN_NO_MATCH"
+                RequestTemplates: 
+                    "application/json": "{\"statusCode\": 200}"
+                TimeoutInMillis: 29000
+                Type: "MOCK"
+
+    ApiGatewayMethod4:
+        DeletionPolicy: "Retain"
+        Type: "AWS::ApiGateway::Method"
+        Properties:
+            RestApiId: !Ref ApiGatewayRestApi
+            ResourceId: !Ref ApiGatewayResource4
+            HttpMethod: "PUT"
+            AuthorizationType: "NONE"
+            ApiKeyRequired: true
+            RequestParameters: 
+                "method.request.header.x-amz-meta-customlabels": false
+                "method.request.path.bucket": true
+                "method.request.path.key": true
+            MethodResponses: 
+              - 
+                ResponseParameters: 
+                    "method.response.header.Access-Control-Allow-Origin": false
+                StatusCode: "200"
+              - 
+                ResponseParameters: 
+                    "method.response.header.Access-Control-Allow-Origin": false
+                StatusCode: "415"
+            Integration: 
+                CacheNamespace: !Ref ApiGatewayResource4
+                ContentHandling: "CONVERT_TO_BINARY"
+                Credentials: !Sub "arn:aws:iam::${AWS::AccountId}:role/apigateway"
+                IntegrationHttpMethod: "PUT"
+                IntegrationResponses: 
+                  - 
+                    ResponseParameters: 
+                        "method.response.header.Access-Control-Allow-Origin": "'*'"
+                    ResponseTemplates: {}
+                    SelectionPattern: "200"
+                    StatusCode: "200"
+                  - 
+                    ResponseParameters: 
+                        "method.response.header.Access-Control-Allow-Origin": "'*'"
+                    SelectionPattern: "415"
+                    StatusCode: "415"
+                PassthroughBehavior: "NEVER"
+                RequestParameters: 
+                    "integration.request.header.x-amz-meta-customlabels": "method.request.header.x-amz-meta-customlabels"
+                    "integration.request.path.bucket": "method.request.path.bucket"
+                    "integration.request.path.object": "method.request.path.key"
+                RequestTemplates: {}
+                TimeoutInMillis: 29000
+                Type: "AWS"
+                Uri: !Sub "arn:aws:apigateway:${AWS::Region}:s3:path/{bucket}/{object}"
+
