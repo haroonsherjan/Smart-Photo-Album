@@ -19,14 +19,14 @@ let micStream;
 let socketError = false;
 let transcribeException = false;
 
-// // check to see if the browser allows mic access
-// if (!window.navigator.mediaDevices.getUserMedia) {
-//     // Use our helper method to show an error on the page
-//     showError('We support the latest versions of Chrome, Firefox, Safari, and Edge. Update your browser and try your request again.');
-//
-//     // maintain enabled/distabled state for the start and stop buttons
-//     toggleStartStop();
-// }
+// check to see if the browser allows mic access
+if (!window.navigator.mediaDevices.getUserMedia) {
+    // Use our helper method to show an error on the page
+    showError('We support the latest versions of Chrome, Firefox, Safari, and Edge. Update your browser and try your request again.');
+
+    // maintain enabled/distabled state for the start and stop buttons
+    toggleStartStop();
+}
 
 $('#start-button').click(function () {
     $('#error').hide(); // hide any existing errors
